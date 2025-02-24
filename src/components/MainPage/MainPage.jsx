@@ -16,11 +16,13 @@ const MainPage = () => {
   const fetchTables = async () => {
     try {
       const response = await api.get('/tables');
-      setTables(response.data);
+      setTables(response.data || []); 
     } catch (error) {
       toast.error('Failed to fetch tables');
+      setTables([]); 
     }
   };
+  
 
   const handleCreateTable = async () => {
     try {
@@ -44,7 +46,7 @@ const MainPage = () => {
       <button onClick={handleCreateTable}>Create Table</button>
       <ul>
         {tables.map((table) => (
-          <li key={table.id} onClick={() => navigate(`/table/${table.id}`)}>
+          <li key={table.id} onClick={() => navigate(`/tables/${table.id}/rows`)}>
             {table.name}
           </li>
         ))}

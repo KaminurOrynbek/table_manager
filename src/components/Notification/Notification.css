@@ -1,78 +1,78 @@
 .Toastify__toast-container {
-    width: 320px;
-  }
+  width: 320px;
+}
 
-  .Toastify__toast {
-    border-radius: 8px;
-    padding: 12px;
-    font-family: 'Poppins', sans-serif;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-  
-  .Toastify__toast--success {
-    background: #4caf50;
-    color: white;
-  }
+.Toastify__toast {
+  border-radius: 8px;
+  padding: 12px;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 
-  .Toastify__toast--error {
-    background: #f44336;
-    color: white;
-  }
+.Toastify__toast--success {
+  background: #4caf50;
+  color: white;
+}
 
-  .Toastify__toast--warning {
-    background: #ff9800;
-    color: white;
-  }
+.Toastify__toast--error {
+  background: #f44336;
+  color: white;
+}
 
-  .Toastify__toast--info {
-    background: #2196f3;
-    color: white;
-  }
+.Toastify__toast--warning {
+  background: #ff9800;
+  color: white;
+}
 
-  .Toastify__toast-icon {
-    margin-right: 10px;
-  }
+.Toastify__toast--info {
+  background: #2196f3;
+  color: white;
+}
 
-  .Toastify__close-button {
-    color: white;
-    opacity: 0.8;
-    transition: opacity 0.3s ease;
+.Toastify__toast-icon {
+  margin-right: 10px;
+}
+
+.Toastify__close-button {
+  color: white;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.Toastify__close-button:hover {
+  opacity: 1;
+}
+
+.Toastify__progress-bar {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.Toastify__slide-enter--top-right {
+  animation: slideInRight 0.3s ease;
+}
+
+.Toastify__slide-exit--top-right {
+  animation: slideOutRight 0.3s ease;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
   }
-  
-  .Toastify__close-button:hover {
+  to {
+    transform: translateX(0);
     opacity: 1;
   }
+}
 
-  .Toastify__progress-bar {
-    background: rgba(255, 255, 255, 0.5);
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
   }
-  
-  .Toastify__slide-enter--top-right {
-    animation: slideInRight 0.3s ease;
+  to {
+    transform: translateX(100%);
+    opacity: 0;
   }
-  
-  .Toastify__slide-exit--top-right {
-    animation: slideOutRight 0.3s ease;
-  }
-  
-  @keyframes slideInRight {
-    from {
-      transform: translateX(100%);
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-  
-  @keyframes slideOutRight {
-    from {
-      transform: translateX(0);
-      opacity: 1;
-    }
-    to {
-      transform: translateX(100%);
-      opacity: 0;
-    }
-  }
+}

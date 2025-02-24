@@ -11,16 +11,21 @@ const TableRow = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!tableId || !rowId) {
-      console.error('Ошибка: tableId или rowId не определены');
-      toast.error('Invalid table or row ID');
+    if (!rowId) {
+      toast.error("Row ID is undefined!");
       return;
     }
 
     const fetchRow = async () => {
       try {
         const response = await api.get(`/tables/${tableId}/rows/${rowId}`);
-        setRowData(response.data);
+        let parsedData = response.data.data;
+        try {
+          parsedData = JSON.parse(response.data.data);
+        } catch (error) {
+          console.warn("Data is not in JSON format:", parsedData);
+        }
+        setRowData({ ...response.data, parsedData });
       } catch (error) {
         toast.error('Failed to fetch row data');
         console.error('Error fetching row:', error);
@@ -32,7 +37,10 @@ const TableRow = () => {
 
   const handleEdit = async () => {
     try {
-      await api.put(`/tables/${tableId}/rows/${rowId}`, rowData);
+      await api.put(`/tables/${tableId}/rows/${rowId}`, {
+        ...rowData,
+        data: JSON.stringify(rowData.parsedData),
+      });
       toast.success('Row updated successfully');
       setIsEditing(false);
     } catch (error) {
@@ -45,23 +53,11 @@ const TableRow = () => {
     try {
       await api.delete(`/tables/${tableId}/rows/${rowId}`);
       toast.success('Row deleted successfully');
-      navigate(`/tables/${tableId}/rows`); 
+      navigate(`/tables/${tableId}`);
     } catch (error) {
       toast.error('Failed to delete row');
       console.error('Error deleting row:', error);
     }
-  };
-
-  const renderData = (data) => {
-    if (typeof data === 'object' && data !== null) {
-      return Object.keys(data).map((key) => (
-        <div key={key}>
-          <strong>{key}:</strong>
-          {renderData(data[key])}
-        </div>
-      ));
-    }
-    return <span>{data}</span>;
   };
 
   if (!rowData) {
@@ -69,22 +65,33 @@ const TableRow = () => {
   }
 
   return (
-    <div className="container">
+    <div className="table-row-container">
       <h1>Row {rowId}</h1>
       {isEditing ? (
-        <div>
+        <div className="edit-container">
           <textarea
-            value={JSON.stringify(rowData.data, null, 2)}
-            onChange={(e) => setRowData({ ...rowData, data: JSON.parse(e.target.value) })}
+            className="edit-textarea"
+            value={JSON.stringify(rowData.parsedData, null, 2)}
+            onChange={(e) => {
+              try {
+                setRowData({ ...rowData, parsedData: JSON.parse(e.target.value) });
+              } catch (error) {
+                console.warn("Invalid JSON input");
+              }
+            }}
           />
-          <button onClick={handleEdit}>Save</button>
-          <button onClick={() => setIsEditing(false)}>Cancel</button>
+          <div className="button-group">
+            <button className="save-button" onClick={handleEdit}>Save</button>
+            <button className="cancel-button" onClick={() => setIsEditing(false)}>Cancel</button>
+          </div>
         </div>
       ) : (
-        <div>
-          {renderData(rowData.data)}
-          <button onClick={() => setIsEditing(true)}>Edit</button>
-          <button onClick={handleDelete}>Delete</button>
+        <div className="data-container">
+          <pre className="json-display">{JSON.stringify(rowData.parsedData, null, 2)}</pre>
+          <div className="button-group">
+            <button className="edit-button" onClick={() => setIsEditing(true)}>Edit</button>
+            <button className="delete-button" onClick={handleDelete}>Delete</button>
+          </div>
         </div>
       )}
     </div>
